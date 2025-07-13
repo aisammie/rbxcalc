@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RBX Tax Calculator - Calculate Robux After Tax | rbxcalc.online</title>
+    <meta name="description" content="Calculate your Robux earnings after Roblox's 30% marketplace tax. Free Robux calculator to determine net earnings from sales.">
+    <meta name="keywords" content="robux calculator, rbx calculator, roblox tax calculator, robux tax, roblox marketplace tax">
+    <meta name="author" content="rbxcalc.online">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="RBX Tax Calculator - Calculate Robux After Tax">
+    <meta property="og:description" content="Calculate your Robux earnings after Roblox's 30% marketplace tax">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rbxcalc.online">
+    <meta property="og:site_name" content="RBX Tax Calculator">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="RBX Tax Calculator">
+    <meta name="twitter:description" content="Calculate your Robux earnings after Roblox's 30% marketplace tax">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💰%3C/text%3E%3C/svg%3E">
+    
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "RBX Tax Calculator",
+        "url": "https://rbxcalc.online",
+        "description": "Calculate your Robux earnings after Roblox's 30% marketplace tax",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+    
+    <style>
+        /* Critical CSS - Inlined for fast loading */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --roblox-red: #e74c3c;
+            --roblox-red-dark: #c0392b;
+            --bg-color: #ffffff;
+            --text-color: #2c3e50;
+            --card-bg: #f8f9fa;
+            --border-color: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --success-color: #27ae60;
+            --copy-bg: #ecf0f1;
+        }
+        
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-bg: #2d3748;
+            --border-color: #4a5568;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --copy-bg: #4a5568;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+        
+        /* 三栏布局 */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            justify-items: center;
+        }
+        
+        /* 当侧边栏显示时的三栏布局 */
+        .main-layout.show-sidebars {
+            grid-template-columns: 250px 1fr 250px;
+            justify-items: stretch;
+        }
+        
+        /* 侧边栏样式 */
+        .sidebar {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            display: none;
+        }
+        
+        /* 当父容器有show-sidebars类时显示侧边栏 */
+        .main-layout.show-sidebars .sidebar {
+            display: block;
+        }
+        
+        .sidebar h3 {
+            color: var(--roblox-red);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .service-item {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .service-item:hover {
+            background: var(--roblox-red);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .service-item .service-title {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .service-item .service-desc {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--roblox-red);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        .calculator-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .calculator-mode {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: var(--bg-color);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .mode-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mode-button.active {
+            background: var(--roblox-red);
+            color: white;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--roblox-red);
+        }
+        
+        .results {
+            margin-top: 20px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: var(--bg-color);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        .result-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .result-label {
+            font-weight: 600;
+        }
+        
+        .result-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .tax-amount {
+            color: var(--roblox-red);
+        }
+        
+        .net-amount {
+            color: var(--success-color);
+            font-size: 1.4rem;
+        }
+        
+        .copy-button {
+            background: var(--copy-bg);
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+        
+        .copy-button:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        
+        .copy-button.copied {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .copy-all-button {
+            width: 100%;
+            background: var(--roblox-red);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-all-button:hover {
+            background: var(--roblox-red-dark);
+            transform: translateY(-2px);
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--roblox-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--roblox-red-dark);
+            transform: scale(1.1);
+        }
+        
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .main-layout.show-sidebars {
+                grid-template-columns: 200px 1fr 200px;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .sidebar {
+                padding: 15px;
+            }
+            
+            .sidebar h3 {
+                font-size: 1.1rem;
+            }
+            
+            .service-item {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 15px;
+                justify-items: center;
+            }
+            
+            .main-layout.show-sidebars {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .container {
+                padding: 0;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .calculator-card {
+                padding: 20px;
+            }
+            
+            .theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+            }
+            
+            .result-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .result-content {
+                justify-content: space-between;
+            }
+            
+            .copy-button {
+                margin-left: 0;
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    
+    <div class="main-layout">
+        <!-- 左侧边栏 -->
+        <aside class="sidebar" id="left-affiliate">
+            <h3>🎨 Game Design Services</h3>
+            <a href="#" class="service-item">
+                <span class="service-title">Icon Design</span>
+                <span class="service-desc">Professional game icons</span>
+            </a>
+            <a href="#" class="service-item">
+                <span class="service-title">UI/UX Design</span>
+                <span class="service-desc">Modern interface design</span>
+            </a>
+            <a href="#" class="service-item">
+                <span class="service-title">Thumbnail Creation</span>
+                <span class="service-desc">Eye-catching thumbnails</span>
+            </a>
+            <a href="#" class="service-item">
+                <span class="service-title">Logo Design</span>
+                <span class="service-desc">Custom game logos</span>
+            </a>
+        </aside>
+        
+        <!-- 主要内容 -->
+        <div class="container">
+            <header>
+                <h1>RBX Tax Calculator</h1>
+                <p class="subtitle">Calculate your Robux earnings after Roblox's 30% marketplace tax</p>
+            </header>
+            
+            <main>
+                <div class="calculator-card">
+                    <div class="calculator-mode">
+                        <button class="mode-button active" id="forwardMode">Tax Calculator</button>
+                        <button class="mode-button" id="reverseMode">Reverse Calculator</button>
+                        <button class="mode-button" id="devexMode">DevEx Calculator</button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="robuxInput" id="inputLabel">Enter Gross Robux Amount:</label>
+                        <input 
+                            type="number" 
+                            id="robuxInput" 
+                            placeholder="Enter your Robux amount..."
+                            min="0"
+                            step="1"
+                            aria-describedby="robux-help"
+                        >
+                        <small id="robux-help" style="color: #7f8c8d; margin-top: 5px; display: block;">
+                            Enter the gross Robux amount before tax
+                        </small>
+                    </div>
+                    
+                    <div class="results" id="results" style="display: none;">
+                        <div class="result-item">
+                            <div class="result-content">
+                                <span class="result-label" id="grossLabel">Gross Amount:</span>
+                                <span class="result-value" id="grossAmount">0 R$</span>
+                            </div>
+                            <button class="copy-button" onclick="copyValue('grossAmount')">📋</button>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-content">
+                                <span class="result-label">Tax (30%):</span>
+                                <span class="result-value tax-amount" id="taxAmount">0 R$</span>
+                            </div>
+                            <button class="copy-button" onclick="copyValue('taxAmount')">📋</button>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-content">
+                                <span class="result-label" id="netLabel">Net Amount:</span>
+                                <span class="result-value net-amount" id="netAmount">0 R$</span>
+                            </div>
+                            <button class="copy-button" onclick="copyValue('netAmount')">📋</button>
+                        </div>
+                        
+                        <div class="result-item" id="devexResult" style="display: none;">
+                            <div class="result-content">
+                                <span class="result-label">DevEx Earnings:</span>
+                                <span class="result-value" style="color: #27ae60; font-size: 1.4rem;" id="devexAmount">$0.00</span>
+                            </div>
+                            <button class="copy-button" onclick="copyValue('devexAmount')">📋</button>
+                        </div>
+                        
+                        <button class="copy-all-button" onclick="copyAllResults()">📋 Copy All Results</button>
+                    </div>
+                </div>
+                
+                <div class="calculator-card">
+                    <h2 style="margin-bottom: 15px; color: var(--roblox-red);">How it works</h2>
+                    <div id="taxInfo">
+                        <p style="margin-bottom: 10px;">Roblox charges a 30% marketplace tax on all Robux transactions including:</p>
+                        <ul style="margin-left: 20px; color: #7f8c8d;">
+                            <li>Game pass sales</li>
+                            <li>Developer product purchases</li>
+                            <li>Asset sales in the catalog</li>
+                            <li>Group fund payouts</li>
+                        </ul>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: #7f8c8d;">
+                            <strong>Tax Mode:</strong> Calculate net earnings from gross amount.<br>
+                            <strong>Reverse Mode:</strong> Calculate required gross amount to achieve desired net earnings.
+                        </p>
+                    </div>
+                    <div id="devexInfo" style="display: none;">
+                        <p style="margin-bottom: 10px;">DevEx (Developer Exchange) allows you to convert Robux to real money:</p>
+                        <ul style="margin-left: 20px; color: #7f8c8d;">
+                            <li>Current rate: ~285 Robux = $1 USD</li>
+                            <li>Minimum cashout: 30,000 Robux ($105)</li>
+                            <li>Must be Premium member</li>
+                            <li>13+ years old required</li>
+                            <li>Valid tax information needed</li>
+                        </ul>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: #7f8c8d;">
+                            <strong>Note:</strong> DevEx rates may change. Always check official Roblox documentation for current rates.
+                        </p>
+                    </div>
+                </div>
+            </main>
+            
+            <footer>
+                <p><strong>Disclaimer:</strong> Unofficial calculator. Not affiliated with Roblox Corporation.</p>
+                <p style="margin-top: 5px;">© 2024 rbxcalc.online - Free Robux Tax Calculator</p>
+            </footer>
+        </div>
+        
+        <!-- 右侧边栏 -->
+        <aside class="sidebar" id="right-affiliate">
+            <h3>💻 Development Services</h3>
+            <a href="#" class="service-item">
+                <span class="service-title">Script Writing</span>
+                <span class="service-desc">Custom Lua scripts</span>
+            </a>
+            <a href="#" class="service-item">
+                <span class="service-title">Game Optimization</span>
+                <span class="service-desc">Performance improvements</span>
+            </a>
+            <a href="#" class="service-item">
+                <span class="service-title">Technical Support</span>
+                <span class="service-desc">24/7 developer help</span>
+            </a>
+            <a href="#" class="service-item">
+                <span class="service-title">Code Review</span>
+                <span class="service-desc">Professional code audit</span>
+            </a>
+        </aside>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        // Robux Tax Calculator JavaScript
+        const robuxInput = document.getElementById('robuxInput');
+        const resultsDiv = document.getElementById('results');
+        const grossAmount = document.getElementById('grossAmount');
+        const taxAmount = document.getElementById('taxAmount');
+        const netAmount = document.getElementById('netAmount');
+        const themeToggle = document.getElementById('themeToggle');
+        const forwardMode = document.getElementById('forwardMode');
+        const reverseMode = document.getElementById('reverseMode');
+        const devexMode = document.getElementById('devexMode');
+        const inputLabel = document.getElementById('inputLabel');
+        const robuxHelp = document.getElementById('robux-help');
+        const grossLabel = document.getElementById('grossLabel');
+        const netLabel = document.getElementById('netLabel');
+        const toast = document.getElementById('toast');
+        const devexResult = document.getElementById('devexResult');
+        const devexAmount = document.getElementById('devexAmount');
+        const taxInfo = document.getElementById('taxInfo');
+        const devexInfo = document.getElementById('devexInfo');
+        
+        let currentMode = 'forward'; // 'forward', 'reverse', 'devex'
+        const DEVEX_RATE = 285; // Robux per USD
+        
+        // 控制侧边栏显示/隐藏
+        function toggleSidebars(show = false) {
+            const mainLayout = document.querySelector('.main-layout');
+            if (show) {
+                mainLayout.classList.add('show-sidebars');
+            } else {
+                mainLayout.classList.remove('show-sidebars');
+            }
+        }
+        
+        // 初始化 - 默认隐藏侧边栏，计算器居中
+        toggleSidebars(false);
+        
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+        
+        // Show toast notification
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+        
+        // Copy value to clipboard
+        function copyValue(elementId) {
+            const element = document.getElementById(elementId);
+            const value = element.textContent.replace(' R$', '').replace(/,/g, '');
+            
+            navigator.clipboard.writeText(value).then(() => {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✓';
+                button.classList.add('copied');
+                showToast(`Copied: ${value} R$`);
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 1500);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = value;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast(`Copied: ${value} R$`);
+            });
+        }
+        
+        // Copy all results
+        function copyAllResults() {
+            const gross = grossAmount.textContent.replace(' R$', '').replace(/,/g, '');
+            const tax = taxAmount.textContent.replace(' R$', '').replace(/,/g, '');
+            const net = netAmount.textContent.replace(' R$', '').replace(/,/g, '');
+            
+            const results = `Gross: ${gross} R$\nTax (30%): ${tax} R$\nNet: ${net} R$`;
+            
+            navigator.clipboard.writeText(results).then(() => {
+                showToast('All results copied!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = results;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('All results copied!');
+            });
+        }
+        
+        // Switch between calculation modes
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Reset active buttons
+            [forwardMode, reverseMode, devexMode].forEach(btn => btn.classList.remove('active'));
+            
+            if (mode === 'forward') {
+                forwardMode.classList.add('active');
+                inputLabel.textContent = 'Enter Gross Robux Amount:';
+                robuxHelp.textContent = 'Enter the gross Robux amount before tax';
+                grossLabel.textContent = 'Gross Amount:';
+                netLabel.textContent = 'Net Amount:';
+                robuxInput.placeholder = 'Enter your Robux amount...';
+                devexResult.style.display = 'none';
+                taxInfo.style.display = 'block';
+                devexInfo.style.display = 'none';
+            } else if (mode === 'reverse') {
+                reverseMode.classList.add('active');
+                inputLabel.textContent = 'Enter Desired Net Amount:';
+                robuxHelp.textContent = 'Enter the net Robux amount you want to receive';
+                grossLabel.textContent = 'Required Gross:';
+                netLabel.textContent = 'Desired Net:';
+                robuxInput.placeholder = 'Enter desired net amount...';
+                devexResult.style.display = 'none';
+                taxInfo.style.display = 'block';
+                devexInfo.style.display = 'none';
+            } else if (mode === 'devex') {
+                devexMode.classList.add('active');
+                inputLabel.textContent = 'Enter Robux for DevEx:';
+                robuxHelp.textContent = 'Enter Robux amount to convert to USD (minimum 30,000)';
+                grossLabel.textContent = 'Robux Amount:';
+                netLabel.textContent = 'After Tax:';
+                robuxInput.placeholder = 'Enter Robux amount...';
+                devexResult.style.display = 'block';
+                taxInfo.style.display = 'none';
+                devexInfo.style.display = 'block';
+            }
+            
+            robuxInput.value = '';
+            resultsDiv.style.display = 'none';
+        }
+        
+        // Calculate tax (forward or reverse)
+        function calculateTax() {
+            const input = parseFloat(robuxInput.value) || 0;
+            
+            if (input <= 0) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+            
+            let gross, tax, net;
+            
+            if (currentMode === 'reverse') {
+                // Reverse calculation: input is desired net amount
+                net = input;
+                gross = Math.ceil(net / 0.7); // Gross amount needed to get desired net
+                tax = gross - net;
+            } else if (currentMode === 'devex') {
+                // DevEx calculation - direct conversion without tax
+                gross = input;
+                tax = 0; // No tax for DevEx display
+                net = input; // Show original amount
+                const devexEarnings = input / 285; // DevEx rate: 285 Robux = $1
+                devexAmount.textContent = input < 30000 ? `$${devexEarnings.toFixed(2)} (Below minimum)` : `$${devexEarnings.toFixed(2)}`;
+                devexResult.style.display = 'block';
+            } else {
+                // Forward calculation: input is gross amount
+                gross = input;
+                tax = Math.floor(gross * 0.3); // 30% tax, rounded down
+                net = gross - tax;
+                devexResult.style.display = 'none';
+            }
+            
+            grossAmount.textContent = `${formatNumber(gross)} R$`;
+            taxAmount.textContent = `${formatNumber(tax)} R$`;
+            netAmount.textContent = `${formatNumber(net)} R$`;
+            
+            resultsDiv.style.display = 'block';
+        }
+        
+        // Event listeners
+        robuxInput.addEventListener('input', calculateTax);
+        forwardMode.addEventListener('click', () => switchMode('forward'));
+        reverseMode.addEventListener('click', () => switchMode('reverse'));
+        devexMode.addEventListener('click', () => switchMode('devex'));
+        
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            
+            // Save preference
+            localStorage.setItem('theme', newTheme);
+        }
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        
+        themeToggle.addEventListener('click', toggleTheme);
+        
+        
+        // Focus input on load
+        window.addEventListener('load', () => {
+            robuxInput.focus();
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '1':
+                        e.preventDefault();
+                        switchMode(false);
+                        break;
+                    case '2':
+                        e.preventDefault();
+                        switchMode(true);
+                        break;
+                    case 'c':
+                        if (resultsDiv.style.display !== 'none') {
+                            e.preventDefault();
+                            copyAllResults();
+                        }
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
